@@ -3,6 +3,7 @@
 
 #include "eli.h"
 #include "input.h"
+#include "parser.h"
 
 // Enum for input symbol types.
 typedef enum {
@@ -21,14 +22,15 @@ Instruction* parse_brainfuck(int size);
 
 LanguageType get_language(void);
 
-static int character;       // input character
-static InputCharType input; // input symbol
+static int character;  // input character
+static InputCharType input;  // input symbol
 
 // Sets input symbol type of loaded symbol.
-void getInputType( void ) {
-  if ((character>='A' && character<='Z') || (character>='a' && character<='z'))
+void getInputType(void) {
+  if ((character >= 'A' && character <= 'Z') ||
+      (character >= 'a' && character <= 'z'))
     input = LETTER;
-  else if (character>='0' && character<='9')
+  else if (character >= '0' && character <= '9')
     input = NUMBER;
   else if (character == EOF)
     input = END;
@@ -63,7 +65,7 @@ Instruction* parseFile(char* fileName) {
   lang = get_language();
 
   if (r_lang_dump) {
-    switch(lang) {
+    switch (lang) {
       case OOK:
         printf("== File is being interpreted as Ook! language ==\n");
         break;
@@ -79,7 +81,7 @@ Instruction* parseFile(char* fileName) {
   }
 
   resetFilePtr();
-  switch(lang) {
+  switch (lang) {
     case OOK:
       return parse_ook(size);
     case COMPRESSED_OOK:
@@ -89,14 +91,13 @@ Instruction* parseFile(char* fileName) {
     default:
       error("Unknown language.");
   }
-  return NULL;   // not reachable
+  return NULL;  // not reachable
 }
 
 // Get language based on input file.
-// If language cannot be determined or is not supported, 
+// If language cannot be determined or is not supported,
 // error and program termination occures.
 LanguageType get_language(void) {
-  
   readInput();
 q0:
   switch (input) {
@@ -132,14 +133,14 @@ q1:
           goto q1;
         default:
           error("Cannot determine input language.");
-      } 
+      }
   }
   return UNKNOWN;
 }
 
 Instruction* parse_ook(int size) {
   int last = 0;
-  Instruction* inst = (Instruction*) malloc (((int)(size/4)+1) * sizeof(Instruction));
+  Instruction* inst = (Instruction*) malloc (((int)(size/4) + 1) * sizeof(Instruction));
 
   readInput();
 a0:
@@ -158,10 +159,10 @@ a0:
         case '.':
           readInput();
           goto a1;
-        case '!': 
+        case '!':
           readInput();
           goto a2;
-        case '?': 
+        case '?':
           readInput();
           goto a3;
       }
@@ -195,7 +196,7 @@ a1:
           goto a0;
       }
     default:
-      error("Unexpected symbol."); 
+      error("Unexpected symbol.");
   }
 
 a2:
@@ -224,7 +225,7 @@ a2:
           goto a0;
       }
     default:
-      error("Unexpected symbol."); 
+      error("Unexpected symbol.");
   }
 
 a3:
@@ -249,9 +250,9 @@ a3:
           goto a0;
       }
     default:
-      error("Unexpected symbol."); 
+      error("Unexpected symbol.");
   }
-  return inst;   // not reachable
+  return inst;  // not reachable
 }
 
 Instruction* parse_compressed_ook(int size) {
@@ -272,10 +273,10 @@ b0:
         case '.':
           readInput();
           goto b1;
-        case '!': 
+        case '!':
           readInput();
           goto b2;
-        case '?': 
+        case '?':
           readInput();
           goto b3;
         default:
@@ -305,7 +306,7 @@ b1:
           readInput();
           goto b0;
         default:
-          error("Unexpected symbol."); 
+          error("Unexpected symbol.");
       }
   }
 
@@ -331,7 +332,7 @@ b2:
           readInput();
           goto b0;
         default:
-          error("Unexpected symbol."); 
+          error("Unexpected symbol.");
       }
   }
 
@@ -353,10 +354,10 @@ b3:
           readInput();
           goto b0;
         default:
-          error("Unexpected symbol."); 
+          error("Unexpected symbol.");
       }
   }
-  return inst;   // not reachable
+  return inst;  // not reachable
 }
 
 Instruction* parse_brainfuck(int size) {
@@ -410,5 +411,5 @@ c0:
           error("Unexpected symbol.");
       }
   }
-  return inst;   /* not reachable */
+  return inst;  // not reachable
 }

@@ -6,8 +6,8 @@
 #include "eli.h"
 #include "parser.h"
 
-#define MAXIMUM_STACK_SIZE 128 // Maximum depth of nested conditions.
-#define MAXIMUM_ARRAY_SIZE 200 // Size of the main memory.
+#define MAXIMUM_STACK_SIZE 128  // Maximum depth of nested conditions.
+#define MAXIMUM_ARRAY_SIZE 200  // Size of the main memory.
 
 // Stack memory.
 Instruction* stack[MAXIMUM_STACK_SIZE];
@@ -18,10 +18,10 @@ int s_top = 0;
 // Push instruction address onto the stack.
 // Push, Pop and Top functions are used for conditional statements and loops.
 void push(Instruction* addr) {
-  if ((s_top+1) >= MAXIMUM_STACK_SIZE) 
+  if ((s_top+1) >= MAXIMUM_STACK_SIZE)
     error("Stack overflow.");
   stack[s_top++] = addr;
-} 
+}
 
 // Remove one address from the stack.
 void pop() {
@@ -39,8 +39,8 @@ Instruction* top() {
 // Function can terminate program if unexpected EOF is inside the loop block.
 Instruction* skip(Instruction* inst) {
   int depth = 0;
-  while(*inst != EXIT) {
-    switch(*inst) {
+  while (*inst != EXIT) {
+    switch (*inst) {
       case BRZ:
         depth++;
         break;
@@ -54,7 +54,7 @@ Instruction* skip(Instruction* inst) {
     inst++;
   }
   error("Unexpected end of program.");
-  return NULL; // not reachable
+  return NULL;  // not reachable
 }
 
 // Dump content of the memory to stdout.
@@ -70,10 +70,10 @@ void dump_memory(int *array) {
   printf("\n");
   for (i = 0; i < MAXIMUM_ARRAY_SIZE; i+= 30) {
     printf("%6d |", i);
-    for (j = 0; j < 30 && j+i < MAXIMUM_ARRAY_SIZE; j++) 
+    for (j = 0; j < 30 && j+i < MAXIMUM_ARRAY_SIZE; j++)
       printf("%3d ", array[i+j]);
     printf("\n");
-  } 
+  }
 }
 
 // Dump sequence of instructions to stdout.
@@ -81,7 +81,7 @@ void dump_instructions(Instruction* inst) {
   int i;
 
   printf("Instruction dump:\n");
-  for(i = 0; *inst != EXIT; i++, inst++) {
+  for (i = 0; *inst != EXIT; i++, inst++) {
     printf("%s ", InstructionTable[*inst]);
     if (i == 30) {
       i = 0;
@@ -92,25 +92,25 @@ void dump_instructions(Instruction* inst) {
 }
 
 // Run the virtual machine.
-void run (Instruction* inst) {
+void run(Instruction* inst) {
   int array[MAXIMUM_ARRAY_SIZE];
   int ptr = 0;
 
-  memset(array, 0, MAXIMUM_ARRAY_SIZE*sizeof(int)); 
+  memset(array, 0, MAXIMUM_ARRAY_SIZE * sizeof(int));
 
-  while (*inst != EXIT) {     
-    switch(*inst) {
+  while (*inst != EXIT) {
+    switch (*inst) {
       case INC:
-        array[ptr] ++;
+        array[ptr]++;
         break;
       case DEC:
-        array[ptr] --;
+        array[ptr]--;
         break;
       case FWD:
-        ptr ++;   
+        ptr++;
         break;
       case BWD:
-        ptr --;
+        ptr--;
         break;
       case PRINTC:
         putchar(array[ptr]);
@@ -119,12 +119,16 @@ void run (Instruction* inst) {
         array[ptr] = getchar();
         break;
       case BRZ:
-        if (array[ptr]) push(inst);
-        else inst = skip(inst);
+        if (array[ptr])
+          push(inst);
+        else
+          inst = skip(inst);
         break;
-      case BNZ: // skips backwards
-        if (array[ptr]) inst = top();
-        else pop();
+      case BNZ:
+        if (array[ptr])
+          inst = top();
+        else
+          pop();
         break;
       default:
         error("Unknown instruction!");
@@ -133,8 +137,8 @@ void run (Instruction* inst) {
     inst++;
   }
 
-  if (r_memory_dump) 
-    dump_memory((int *)&array);
+  if (r_memory_dump)
+    dump_memory((int*)&array);
 }
 
 // Print help block into stdout.
@@ -149,12 +153,12 @@ void help(char* name) {
   exit(EXIT_SUCCESS);
 }
 
-int main (int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
   char c;
 
   if (argc < 2) help(argv[0]);
 
-  while ((c = getopt (argc, argv, "ilm")) != -1) {
+  while ((c = getopt(argc, argv, "ilm")) != -1) {
     switch (c) {
       case 'i':
         r_instr_dump = true;

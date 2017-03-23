@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "input.h"
 #include "eli.h"
 
 #define BUFFER_SIZE 1024
@@ -12,7 +13,7 @@ FILE *inputFile;
 // Load given input file and returns its size in bytes.
 // In case of error program is terminated with EXIT_FAILURE value.
 // File pointer is saved into global variable.
-int initInput( const char* fileName ) {
+int initInput(const char* fileName) {
   int size;
 
   if ( !fileName )
@@ -33,8 +34,8 @@ int initInput( const char* fileName ) {
 // Read one character from the input file.
 // Returns character of EOF (in case of EOF or error)
 int getChar() {
-  if ( ! *linePointer ) {
-    if (!fgets(line, BUFFER_SIZE, inputFile)){ 
+  if (!*linePointer) {
+    if (!fgets(line, BUFFER_SIZE, inputFile)) {
       fclose(inputFile);
       return EOF;
     }

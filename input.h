@@ -1,8 +1,8 @@
-#ifndef __INPUT__
-#define __INPUT__
+#ifndef INPUT_H_
+#define INPUT_H_
 
-int initInput( const char* );
+int initInput(const char*);
 int getChar(void);
 void resetFilePtr(void);
 
-#endif // __INPUT__ //
+#endif  // INPUT_H_

@@ -1,5 +1,5 @@
-#ifndef __ELI__
-#define __ELI__
+#ifndef ELI_H_
+#define ELI_H_
 
 #include <stdbool.h>
 
@@ -15,4 +15,4 @@ extern bool r_memory_dump;
 extern bool r_instr_dump;
 extern bool r_lang_dump;
 
-#endif // __ELI__ //
+#endif  // ELI_H_

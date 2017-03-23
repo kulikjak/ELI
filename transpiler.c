@@ -13,7 +13,6 @@ const char ook_symbols_s[8] = {'.', '!', '.', '!', '?', '.', '?', '!'};
 
 // Generate Ook! code and send it into given file.
 void generateOok(Instruction* inst, FILE* out) {
-
   while (*inst != EXIT) {
     fprintf(out, "Ook%c Ook%c ", ook_symbols_f[*inst], ook_symbols_s[*inst]);
     inst++;
@@ -23,7 +22,6 @@ void generateOok(Instruction* inst, FILE* out) {
 
 // Generate compressed Ook! code and send it into given file.
 void generateCompressedOok(Instruction* inst, FILE* out) {
-
   while (*inst != EXIT) {
     fprintf(out, "%c%c ", ook_symbols_f[*inst], ook_symbols_s[*inst]);
     inst++;
@@ -33,7 +31,6 @@ void generateCompressedOok(Instruction* inst, FILE* out) {
 
 // Generate brainf*ck code and send it into given file.
 void generateBrainfuck(Instruction* inst, FILE* out) {
-
   while (*inst != EXIT) {
     fprintf(out, "%c", brainfuck_symbols[*inst]);
     inst++;
@@ -46,7 +43,7 @@ void dump_instructions(Instruction* inst) {
   int i;
 
   printf("Instruction dump:\n");
-  for(i = 0; *inst != EXIT; i++, inst++) {
+  for (i = 0; *inst != EXIT; i++, inst++) {
     printf("%s ", InstructionTable[*inst]);
     if (i == 30) {
       i = 0;
@@ -70,7 +67,7 @@ void help(char* name) {
   exit(EXIT_SUCCESS);
 }
 
-int main (int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
   char c;
   bool t_brainfuck, t_cook, t_ook;
   FILE *out;
@@ -81,7 +78,7 @@ int main (int argc, char *argv[]) {
 
   if (argc < 2) help(argv[0]);
 
-  while ((c = getopt (argc, argv, "ilbco")) != -1) {
+  while ((c = getopt(argc, argv, "ilbco")) != -1) {
     switch (c) {
       case 'i':
         r_instr_dump = true;
@@ -121,27 +118,30 @@ int main (int argc, char *argv[]) {
     if (out != NULL) {
       printf("Generating Brainfuck code\n");
       generateBrainfuck(inst, out);
-      fclose (out);
-    } else
+      fclose(out);
+    } else {
       printf("Cannot create output file for Brainfuck code\n");
+    }
   }
   if (t_cook) {
     out = fopen("output.cook", "w");
     if (out != NULL) {
       printf("Generating compressed Ook! code\n");
       generateCompressedOok(inst, out);
-      fclose (out);
-    } else
+      fclose(out);
+    } else {
       printf("Cannot create output file for compressed Ook! code\n");
+    }
   }
   if (t_ook) {
     out = fopen("output.ook", "w");
     if (out != NULL) {
       printf("Generating Ook! code\n");
       generateOok(inst, out);
-      fclose (out);
-    } else
+      fclose(out);
+    } else {
       printf("Cannot create output file for Ook! code\n");
+    }
   }
 
   free(inst);
